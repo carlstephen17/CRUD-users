@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { API } from '../API';
-import '../styles/ReadStyle.css'; 
+import '../styles/ReadStyle.css';
+import { IoArrowBackCircleSharp } from "react-icons/io5";
+import { FaUserEdit } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 function Read() {
     const { id } = useParams();
@@ -13,8 +16,13 @@ function Read() {
             try {
                 const response = await fetch(`${API}/users/${id}`);
                 const data = await response.json();
-                if (response.ok) setUser(data);
+                if (response.ok) {
+                    setUser(data);
+                } else {
+                    toast.error("User Not Found");
+                }
             } catch (err) {
+                toast.error("Error fetching user details");
                 console.error("Error:", err);
             } finally {
                 setLoading(false);
@@ -35,7 +43,7 @@ function Read() {
     return (
         <div className="read-container">
             <h2>User Profile</h2>
-            
+
             <div className="user-details-group">
                 <strong>ID:</strong> <span>{user.id}</span>
             </div>
@@ -50,8 +58,8 @@ function Read() {
             </div>
 
             <div className="read-actions">
-                <Link to="/" className="btn-back">Back to Table</Link>
-                <Link to={`/edit/${user.id}`} className="edit" style={{padding: '10px 20px', borderRadius: '5px', textDecoration: 'none'}}>Edit User</Link>
+                <Link to="/" className="btn-back"><IoArrowBackCircleSharp /></Link>
+                <Link to={`/edit/${user.id}`} className="edit"><FaUserEdit/></Link>
             </div>
         </div>
     );

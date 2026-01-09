@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { API } from '../API';
 import '../styles/CreateStyle.css';
+import { TbCancel } from "react-icons/tb";
+import { FaCheck } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 function Create() {
   const [name, setName] = useState('');
@@ -10,22 +13,21 @@ function Create() {
 
   const navigate = useNavigate();
 
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail|yahoo)\.com$/;
-
   async function handleCreate(e) {
     e.preventDefault();
 
-    if (!emailRegex.test(email)) {
-      alert('Enter a valid Email address');
+    if (!name || !email || !phone) {
+      toast.error("All fields are required");
       return;
-    } 
-    if (!name|| !email  || !phone) {
-      alert("All fields are required");
+    }
+
+    if (!email.includes("@gmail.com") && !email.includes("@yahoo.com")) {
+      toast.error("Input a correct Gmail or Yahoo address");
       return;
     }
 
     if (!phone.startsWith("09") || phone.length !== 11) {
-      alert("Enter a correct phone number (starts with 09 and must be 11 digits)");
+      toast.error("Input a correct phone number (starts with 09 and is 11 digits)");
       return;
     }
 
@@ -37,42 +39,62 @@ function Create() {
       });
 
       if (response.ok) {
+        toast.success("User created successfully!");
         navigate('/');
+      } else {
+        toast.error("Failed to create user");
       }
     } catch (err) {
+      toast.error("Error creating user");
       console.error(err);
     }
   }
 
   return (
-    <div className="create-form-container">
-      <h2>Create User</h2>
+    <div className="main-content">
+      <div className="create-container">
+        <h2>Create User</h2>
 
-      <form onSubmit={handleCreate}>
-        <input
-          placeholder="Enter name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
+        <form onSubmit={handleCreate}>
+          <div className="create-form-group">
+            <label>Name</label>
+            <input
+              type='text'
+              placeholder="Enter name"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+            />
+          </div>
 
-        <input
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={e => {
-            setEmail(e.target.value);
-          }}
-        />
+          <div className="create-form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        <input
-          type="tel"
-          placeholder="Enter phone"
-          value={phone}
-          onChange={e => setPhone(e.target.value)}
-        />
+          <div className="create-form-group">
+            <label>Phone</label>
+            <input
+              type="tel"
+              placeholder="Enter phone"
+              value={phone}
+              onChange={e => setPhone(e.target.value)}
+              required
+            />
+          </div>
 
-        <button type="submit">Create</button>
-      </form>
+          <div className="create-actions">
+            <Link to="/" className="btn-cancel"><TbCancel /></Link>
+            <button type="submit" className="btn-update"><FaCheck /></button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 .read-container {
     max-width: 600px;
-    margin: 40px auto;
+    width: 400px;
+    margin: 150px auto;
     padding: 30px;
     background-color: #ffffff;
     border-radius: 12px;
@@ -36,21 +37,44 @@
 
 .read-actions {
     display: flex;
-    gap: 15px;
+    gap: 20px;
     margin-top: 30px;
     justify-content: center;
 }
 
-.btn-back {
-    background-color: #6c757d;
+.btn-back, 
+.edit {
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center; 
+    gap: 10px; 
     color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 10px 25px;
+    border-radius: 6px;
     text-decoration: none;
     font-weight: bold;
-    transition: background 0.3s;
+    font-size: 14px;
+    transition: all 0.3s ease; 
+    border: none;
+    cursor: pointer;
+}
+
+.btn-back {
+    background-color: #6c757d;
 }
 
 .btn-back:hover {
     background-color: #5a6268;
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.edit {
+    background-color: #17a2b8;
+}
+
+.edit:hover {
+    background-color: #138496;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3); 
 }

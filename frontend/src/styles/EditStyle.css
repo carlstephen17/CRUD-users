@@ -1,6 +1,6 @@
 .edit-container {
-    max-width: 500px;
-    margin: 50px auto;
+    width: 350px;
+    margin: 0 auto;
     padding: 30px;
     background-color: #ffffff;
     border-radius: 12px;
@@ -43,35 +43,48 @@
     outline: none;
     box-shadow: 0 0 5px rgba(23, 162, 184, 0.2);
 }
-
 .edit-actions {
+    width: 100%;
     display: flex;
     justify-content: space-between;
-    margin-top: 30px;
-    gap: 10px;
+    align-items: center;
+    margin-top: 30px; 
+    gap: 20px; 
+}
+
+.btn-update,
+.btn-cancel {
+    flex: 1; 
+    height: 48px; 
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-decoration: none;
 }
 
 .btn-update {
     background-color: #17a2b8;
     color: white;
-    padding: 10px 25px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
 }
 
 .btn-update:hover {
     background-color: #138496;
+    transform: translateY(-1px);
 }
 
 .btn-cancel {
+    margin-top: 10px;
     background-color: #6c757d;
     color: white;
-    padding: 10px 25px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    text-align: center;
+}
+
+.btn-cancel:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
 }

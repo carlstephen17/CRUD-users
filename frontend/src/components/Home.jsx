@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { API } from '../API';
 import '../styles/HomeStyle.css';
+import { FaUserCircle, FaUserEdit, FaTrash } from "react-icons/fa"; 
+import { FaUserPlus } from "react-icons/fa6";
+import toast from "react-hot-toast"; 
 
 function Home() {
   const [users, setUsers] = useState([]);
@@ -13,10 +16,10 @@ function Home() {
         const data = await response.json();
         setUsers(Array.isArray(data) ? data : []);
       } else {
-        alert("Response not OK");
+        toast.error("Failed to load users"); 
       }
     } catch (err) {
-      alert("Error fetching users");
+      toast.error("Error fetching users");
       console.error(err);
     }
   }
@@ -28,13 +31,15 @@ function Home() {
           method: "DELETE",
         });
         if (response.ok) {
+          toast.success("All users deleted successfully");
           fetchUsers();
         }
       } catch (err) {
-        console.error("Error deleting user:", err);
+        toast.error("Could not delete users");
+        console.error("Error deleting users:", err);
       }
     }
-  };
+  }
 
   async function handleDelete(id) {
     if (window.confirm("Are you sure you want to delete this user?")) {
@@ -43,40 +48,38 @@ function Home() {
           method: "DELETE",
         });
         if (response.ok) {
+          toast.success("User deleted"); 
           fetchUsers();
         }
       } catch (err) {
+        toast.error("Error deleting user");
         console.error("Error deleting user:", err);
       }
     }
-  };
-
+  }
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
   return (
+  <div className="app-container">
     <div className="main-content">
       <div className="header-container">
         <h2 className="header-title">Users Data</h2>
-
         <div className="btns">
           <Link to="/create" className="create-btn">
-            Create +
+            <FaUserPlus />
           </Link>
-
           <button
             className="deleteAll-btn"
             onClick={handleDeleteAll}
             disabled={users.length === 0}
           >
-            Delete All
+            <FaTrash />
           </button>
-
         </div>
       </div>
-
 
       <table>
         <thead>
@@ -102,13 +105,12 @@ function Home() {
                 <td>{user.phone}</td>
                 <td>
                   <div className="linkBtns">
-                    <Link to={`/read/${user.id}`} className="read">Read</Link>
-                    <Link to={`/edit/${user.id}`} className="edit">Edit</Link>
+                    <Link to={`/read/${user.id}`} className="read"><FaUserCircle /></Link>
+                    <Link to={`/edit/${user.id}`} className="editHome"><FaUserEdit /></Link>
                     <button
                       className="delete"
                       onClick={() => handleDelete(user.id)}
-                    >
-                      Delete
+                    ><FaTrash />
                     </button>
                   </div>
                 </td>
@@ -118,7 +120,8 @@ function Home() {
         </tbody>
       </table>
     </div>
-  );
+  </div>
+);
 }
 
 export default Home;

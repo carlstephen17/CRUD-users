@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { API } from '../API';
 import '../styles/EditStyle.css';
+import { TbCancel } from "react-icons/tb";
+import { FaCheck } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 function Edit() {
     const { id } = useParams();
@@ -22,6 +25,7 @@ function Edit() {
                     setPhone(data.phone);
                 }
             } catch (err) {
+                toast.error("Error fetching user data");
                 console.error("Error fetching user:", err);
             }
         };
@@ -31,13 +35,13 @@ function Edit() {
     async function handleUpdate(e) {
         e.preventDefault();
 
-        if (!email.includes("@gmail.com" || !email.includes("@yahoo.com"))) {
-            alert("Input a correct Gmail address");
+        if (!email.includes("@gmail.com") && !email.includes("@yahoo.com")) {
+            toast.error("Input a correct Gmail or Yahoo address");
             return;
         }
 
         if (!phone.startsWith("09") || phone.length !== 11) {
-            alert("Input a correct phone number (starts with 09 and is 11 digits)");
+            toast.error("Input a correct phone number (starts with 09 and is 11 digits)");
             return;
         }
 
@@ -49,12 +53,13 @@ function Edit() {
             });
 
             if (response.ok) {
-                alert("User updated successfully!");
+                toast.success("User updated successfully!");
                 navigate("/");
             } else {
-                alert("Failed to update user");
+                toast.error("Failed to update user");
             }
         } catch (err) {
+            toast.error("Update Error");
             console.error("Update Error:", err);
         }
     };
@@ -92,8 +97,8 @@ function Edit() {
                         />
                     </div>
                     <div className="edit-actions">
-                        <Link to="/" className="btn-cancel">Cancel</Link>
-                        <button type="submit" className="btn-update">Update User</button>
+                        <Link to="/" className="btn-cancel"><TbCancel/></Link>
+                        <button type="submit" className="btn-update"><FaCheck/></button>
                     </div>
                 </form>
             </div>

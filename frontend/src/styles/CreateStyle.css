@@ -1,33 +1,59 @@
 body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #f4f7f6;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  }
 
+.main-content {
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding-top: 70px;
 }
 
-.create-form-container {
-  width: 400px;
-  margin: 20px auto;
-  padding: 25px;
+.create-container {
+  margin: 0 auto;
+  width: 450px;
+  text-align: center;
+  padding: 40px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  background-color: #f9f9f9;
-  font-family: Arial, sans-serif;
+  background-color: white;
 }
 
-.create-form-container h2 {
-  text-align: center;
+h2 {
   margin-bottom: 30px;
   color: #333;
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 600;
 }
 
-.create-form-container input {
+.create-form-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.create-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #555;
+  font-size: 14px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"] {
   width: 100%;
   padding: 12px;
-  margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 16px;
@@ -35,26 +61,53 @@ body {
   box-sizing: border-box;
 }
 
-.create-form-container input:focus {
+input:focus {
   border-color: #007bff;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   outline: none;
 }
 
-.create-form-container button {
-  width: 100%;
-  padding: 14px;
-  background-color: #007bff;
-  color: white;
-  font-weight: 600;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  margin-top: 10px;
+.create-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  gap: 20px;
 }
 
-.create-form-container button:hover {
-  background-color: #0056b3;
+.btn-update,
+.btn-cancel {
+  flex: 1;
+  height: 48px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
+}
+
+.btn-update {
+  margin-top: 9px;
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-update:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.btn-cancel {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
 }
