@@ -17,39 +17,47 @@ const db = mysql.createConnection({
     database: "crud"
 });
 
-db.connect((error) => {
-    if (error) {
-        console.error("Database connection failed:", error);
-        return;
-    }
+db.connect((err) => {
+    if (err) return console.error("Database connection failed:", err);
     console.log("Database Connected!");
 });
 
-// GET all users
+// GET all users sorted by ID ascending
 app.get('/users', (req, res) => {
-    const sql = 'SELECT * FROM users';
-    db.query(sql, (error, result) => {
-        if (error) return res.status(500).json({ error });
+    const sql = `
+        SELECT u.id, u.name, u.email, u.phone, d.id as departmentID, d.name AS department
+        FROM users u
+        JOIN departments d ON u.department_id = d.id
+        ORDER BY u.id
+    `;
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).json({ error: err });
         res.json(result);
     });
 });
 
-// GET a single user by ID
+
+// GET single user by ID 
 app.get('/users/:id', (req, res) => {
     const { id } = req.params;
-    const sql = 'SELECT * FROM users WHERE id = ?';
-    db.query(sql, [id], (error, result) => {
-        if (error) return res.status(500).json({ error });
+    const sql = `
+        SELECT u.id, u.name, u.email, u.phone, d.name AS department
+        FROM users u
+        JOIN departments d ON u.department_id = d.id
+        WHERE u.id = ?
+    `;
+    db.query(sql, [id], (err, result) => {
+        if (err) return res.status(500).json({ error: err });
         res.json(result[0] || null);
     });
 });
 
-// CREATE a new user
+// CREATE a user
 app.post('/users', (req, res) => {
-    const { name, email, phone } = req.body;
-    const sql = 'INSERT INTO users(name, email, phone) VALUES(?,?,?)';
-    db.query(sql, [name, email, phone], (error, result) => {
-        if (error) return res.status(500).json({ error });
+    const { name, email, phone, department_id } = req.body;
+    const sql = 'INSERT INTO users(name, email, phone, department_id) VALUES(?,?,?,?)';
+    db.query(sql, [name, email, phone, department_id], (err, result) => {
+        if (err) return res.status(500).json({ error: err });
         res.json({ message: "User created!", id: result.insertId });
     });
 });
@@ -57,35 +65,42 @@ app.post('/users', (req, res) => {
 // UPDATE a user
 app.put('/users/:id', (req, res) => {
     const { id } = req.params;
-    const { name, email, phone } = req.body;
-    const sql = 'UPDATE users SET name = ?, email = ?, phone = ? WHERE id = ?';
-    db.query(sql, [name, email, phone, id], (error, result) => {
-        if (error) return res.status(500).json({ error });
+    const { name, email, phone, department_id } = req.body;
+    const sql = 'UPDATE users SET name = ?, email = ?, phone = ?, department_id = ? WHERE id = ?';
+    db.query(sql, [name, email, phone, department_id, id], (err, result) => {
+        if (err) return res.status(500).json({ error: err });
         res.json({ message: "User updated!", affectedRows: result.affectedRows });
     });
 });
 
-// DELETE all user
+// DELETE single user
+app.delete('/users/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'DELETE FROM users WHERE id = ?';
+    db.query(sql, [id], (err, result) => {
+        if (err) return res.status(500).json({ error: err });
+        res.json({ message: "User deleted!", affectedRows: result.affectedRows });
+    });
+});
+
+// DELETE all users
 app.delete('/users', (req, res) => {
-    const sql = 'TRUNCATE TABLE users'; // Truncate deletes all rows and resets auto increment
-    db.query(sql, (error) => {
-        if (error) return res.status(500).json({ error });
+    const sql = 'TRUNCATE TABLE users';
+    db.query(sql, (err) => {
+        if (err) return res.status(500).json({ error: err });
         res.json({ message: "All users deleted and ID reset!" });
     });
 });
 
-
-// DELETE a user
-app.delete('/users/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = 'DELETE FROM users WHERE id = ?';
-    db.query(sql, [id], (error, result) => {
-        if (error) return res.status(500).json({ error });
-        res.json({ message: "User deleted!", affectedRows: result.affectedRows });
+// GET all departments
+app.get('/departments', (req, res) => {
+    const sql = 'SELECT * FROM departments ORDER BY id';
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).json({ error: err });
+        res.json(result);
     });
 });
 
 app.listen(port, () => {
     console.log('Server is running on port:', port);
 });
-

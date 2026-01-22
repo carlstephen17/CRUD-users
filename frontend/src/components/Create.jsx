@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { API } from '../API';
 import '../styles/CreateStyle.css';
@@ -7,6 +7,11 @@ import { FaCheck } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 function Create() {
+  // departments
+  const [departments, setDepartments] = useState([]);
+  const [departmentID, setDepartmentID] = useState('');
+
+  // users
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -16,7 +21,7 @@ function Create() {
   async function handleCreate(e) {
     e.preventDefault();
 
-    if (!name || !email || !phone) {
+    if (!name || !email || !phone || !departmentID) {
       toast.error("All fields are required");
       return;
     }
@@ -35,7 +40,7 @@ function Create() {
       const response = await fetch(`${API}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone }),
+        body: JSON.stringify({ name, email, phone, department_id: departmentID }),
       });
 
       if (response.ok) {
@@ -49,6 +54,26 @@ function Create() {
       console.error(err);
     }
   }
+
+  async function fetchDepartments() {
+    try {
+      const response = await fetch(`${API}/departments`);
+
+      if (response.ok) {
+        toast.success("Departments fetched successfully!");
+        const data = await response.json();
+        setDepartments(data);
+      }
+
+    } catch (err) {
+      toast.error("Error fetching departments");
+      console.error(err);
+    }
+  }
+
+  useEffect(() => {
+    fetchDepartments()
+  }, [])
 
   return (
     <div className="main-content">
@@ -87,6 +112,24 @@ function Create() {
               onChange={e => setPhone(e.target.value)}
               required
             />
+          </div>
+
+          <div className="create-form-group">
+            <label>Department</label>
+            <select
+              value={departmentID}
+              onChange={e => setDepartmentID(e.target.value)}
+            >
+              <option value=''>Select Department</option>
+              {departments.map(department => (
+                <option
+                  key={department.id}
+                  value={department.id}
+                >
+                  {department.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="create-actions">

@@ -67,6 +67,35 @@ input:focus {
   outline: none;
 }
 
+select {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+select:hover,
+select:focus {
+  border-color: #4f46e5; 
+  box-shadow: 0 0 5px rgba(79, 70, 229, 0.5);
+  outline: none;
+}
+
+select::after {
+  content: '▾';
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 0.8rem;
+  color: #555;
+}
+
 .create-actions {
   display: flex;
   justify-content: space-between;
